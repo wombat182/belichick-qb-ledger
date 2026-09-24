@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A draft-capital analysis of the quarterbacks selected by Bill Belichick and six peer NFL coaches.">
+<title>The Belichick QB Ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&family=Sora:wght@200;300;400;600&display=swap">
+<style>
+/* Single committed visual world: a dark instrument panel. No light variant by design. */
+:root{
+  --void:#05070b; --surface:#0b1018; --glass:rgba(255,255,255,.028); --glass-2:rgba(255,255,255,.055);
+  --ink:#eef3fa; --ink-2:#94a5bd; --ink-3:#5e6f89;
+  --rule:rgba(255,255,255,.085); --rule-2:rgba(255,255,255,.045);
+  --steel:#33a3bd; --brass:#b8871f; --crimson:#e2568e;
+  --beam:#5fe0f0; --beam-dim:rgba(95,224,240,.14); --gold:#f0c356;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --disp:"Sora","Helvetica Neue",Arial,sans-serif;
+  --body:"Manrope","Helvetica Neue",Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--void);color:var(--ink);font-family:var(--body);
+  font-size:17px;line-height:1.72;font-weight:400;-webkit-font-smoothing:antialiased;
+  position:relative;overflow-x:hidden}
+/* ambient: one cool bloom overhead, one hairline grid. both inert. */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(120% 70% at 50% -18%, rgba(95,224,240,.10), transparent 62%),
+             radial-gradient(90% 50% at 88% 8%, rgba(226,86,142,.045), transparent 60%)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.55;
+  background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+  background-size:64px 64px;
+  -webkit-mask-image:radial-gradient(85% 60% at 50% 0%,#000,transparent 75%);
+          mask-image:radial-gradient(85% 60% at 50% 0%,#000,transparent 75%)}
+.wrap{max-width:1160px;margin:0 auto;padding-inline:24px;padding-block:0 96px;position:relative;z-index:1}
+.num,.mono,td.n,th.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+a{color:var(--beam);text-decoration-color:rgba(95,224,240,.4);text-underline-offset:3px}
+:focus-visible{outline:1px solid var(--beam);outline-offset:4px;border-radius:4px}
+
+/* ── masthead ─────────────────────────────────────── */
+.mast{padding-block:72px 56px;border-bottom:1px solid var(--rule);position:relative}
+.mast::after{content:"";position:absolute;left:0;bottom:-1px;width:180px;height:1px;
+  background:linear-gradient(90deg,var(--beam),transparent)}
+.kicker{max-width:none;font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 30px;display:flex;align-items:center;gap:11px}
+.kicker::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--beam);
+  box-shadow:0 0 10px var(--beam);flex:none}
+.kicker,.eyebrow{align-items:center}
+h1{font-family:var(--disp);font-size:clamp(42px,8.2vw,92px);line-height:1.0;font-weight:200;
+  letter-spacing:-.045em;margin:0 0 30px;text-wrap:balance;max-width:15ch}
+.dek{font-size:clamp(18px,2.1vw,21px);line-height:1.62;color:var(--ink-2);max-width:60ch;
+  margin:0;font-weight:400}
+.dek b{color:var(--ink);font-weight:600}
+
+/* ── hero readout ─────────────────────────────────── */
+.hero{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center;
+  margin-top:48px;padding:34px 38px;border-radius:18px;
+  background:linear-gradient(180deg,rgba(95,224,240,.055),rgba(255,255,255,.018));
+  border:1px solid var(--rule);position:relative;overflow:hidden;
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.hero::before{content:"";position:absolute;left:0;top:0;width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(95,224,240,.75),transparent)}
+.hero .fig{font-family:var(--disp);font-weight:200;font-size:clamp(64px,11vw,104px);
+  line-height:.82;letter-spacing:-.055em;color:var(--beam);font-variant-numeric:tabular-nums;
+  text-shadow:0 0 22px rgba(95,224,240,.28)}
+.hero .cap{font-size:16.5px;line-height:1.6;color:var(--ink-2);max-width:48ch}
+.hero .cap b{color:var(--ink);font-weight:600}
+
+/* ── sections ─────────────────────────────────────── */
+section{padding-block:74px;border-bottom:1px solid var(--rule-2)}
+section:last-of-type{border-bottom:0}
+.eyebrow{max-width:none;font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--beam);margin:0 0 18px;display:flex;align-items:center;gap:11px;opacity:.9}
+.eyebrow::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--beam);
+  box-shadow:0 0 9px var(--beam);flex:none}
+h2{font-family:var(--disp);font-size:clamp(28px,4.2vw,44px);line-height:1.12;font-weight:200;
+  letter-spacing:-.035em;margin:0 0 22px;text-wrap:balance;max-width:20ch}
+h3{font-family:var(--disp);font-size:16px;font-weight:600;letter-spacing:-.01em;margin:30px 0 8px}
+p{max-width:64ch;margin:0 0 17px}
+.lede{font-size:19.5px;color:var(--ink-2);line-height:1.62}
+strong{font-weight:600;color:var(--ink)}
+em{font-style:italic;color:var(--ink)}
+.tag{font-family:var(--mono);font-size:.84em;background:rgba(95,224,240,.1);
+  border:1px solid rgba(95,224,240,.22);color:var(--beam);
+  padding:2px 7px;border-radius:5px;white-space:nowrap}
+
+/* ── panels & tables ──────────────────────────────── */
+.scroll{overflow-x:auto;margin:30px 0 10px;border:1px solid var(--rule);border-radius:16px;
+  background:var(--glass);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:660px}
+th{font-family:var(--mono);font-weight:400;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-3);text-align:left;padding:17px 14px 13px;border-bottom:1px solid var(--rule);
+  white-space:nowrap}
+th.n,td.n{text-align:right}
+td{padding:12px 14px;border-bottom:1px solid var(--rule-2);vertical-align:middle;white-space:nowrap;
+  transition:background .18s}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover td{background:rgba(255,255,255,.03)}
+tr.hi td{background:linear-gradient(90deg,rgba(95,224,240,.1),rgba(95,224,240,.02));color:var(--ink)}
+tr.hi:hover td{background:linear-gradient(90deg,rgba(95,224,240,.15),rgba(95,224,240,.04))}
+tr.hi td:first-child{box-shadow:inset 2px 0 0 var(--beam)}
+td.name{font-family:var(--disp);font-weight:500;letter-spacing:-.012em;white-space:nowrap;font-size:14px}
+tr.hi td.name{font-weight:600}
+td.sub{color:var(--ink-3);font-size:11.5px;font-family:var(--mono);letter-spacing:.01em}
+.bar{display:block;height:6px;border-radius:0 3px 3px 0;min-width:2px;
+  background:linear-gradient(90deg,rgba(51,163,189,.35),var(--steel));
+  box-shadow:0 0 9px rgba(51,163,189,.45)}
+.bar.b{background:linear-gradient(90deg,rgba(95,224,240,.4),var(--beam));
+  box-shadow:0 0 11px rgba(95,224,240,.6)}
+.barcell{width:140px;padding-right:18px!important}
+.zero{color:var(--ink-3)}
+caption{caption-side:bottom;text-align:left;font-family:var(--body);font-size:13px;
+  color:var(--ink-3);padding:15px 14px;line-height:1.6;border-top:1px solid var(--rule-2)}
+
+/* ── charts ───────────────────────────────────────── */
+figure{margin:32px 0 10px}
+.chartbox{background:var(--glass);border:1px solid var(--rule);border-radius:16px;
+  padding:26px 26px 18px;position:relative;
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+.chart-t{font-family:var(--disp);font-weight:500;font-size:15.5px;letter-spacing:-.015em;margin:0 0 4px}
+.chart-s{font-size:13.5px;color:var(--ink-3);margin:0 0 20px;max-width:60ch;line-height:1.6}
+svg{display:block;width:100%;height:auto;max-width:100%;overflow:visible}
+#c1 svg path[stroke]{filter:drop-shadow(0 0 6px rgba(51,163,189,.5))}
+.chartbox svg circle,.chartbox svg path[fill]:not([fill="none"]),.chartbox svg rect[fill]:not([fill="transparent"]){
+  filter:drop-shadow(0 0 7px rgba(120,220,240,.22))}
+figcaption{font-size:13px;color:var(--ink-3);margin-top:14px;line-height:1.6;max-width:68ch}
+.legend{display:flex;flex-wrap:wrap;gap:20px;margin:0 0 16px;font-family:var(--mono);font-size:11px;
+  color:var(--ink-2);letter-spacing:.08em;text-transform:uppercase}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;
+  vertical-align:0;box-shadow:0 0 8px currentColor}
+.tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .14s;
+  background:rgba(8,13,20,.94);color:var(--ink);border:1px solid rgba(95,224,240,.3);
+  font-family:var(--mono);font-size:11px;line-height:1.6;
+  padding:9px 12px;border-radius:8px;white-space:nowrap;z-index:9;transform:translate(-50%,-120%);
+  box-shadow:0 8px 28px rgba(0,0,0,.6),0 0 20px rgba(95,224,240,.1);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.tip b{font-weight:500;font-size:11.5px;color:var(--beam)}
+
+/* ── pull / note ──────────────────────────────────── */
+.pull{margin:36px 0;padding:30px 34px;border-radius:16px;border:1px solid var(--rule);
+  background:linear-gradient(135deg,rgba(226,86,142,.07),rgba(255,255,255,.015));position:relative;
+  overflow:hidden}
+.pull::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:linear-gradient(180deg,var(--crimson),rgba(226,86,142,.15));
+  box-shadow:0 0 14px rgba(226,86,142,.55)}
+.pull p{margin:0;font-family:var(--disp);font-size:19.5px;line-height:1.56;font-weight:200;
+  letter-spacing:-.017em;color:var(--ink);max-width:62ch}
+.pull .src{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--crimson);margin-top:18px}
+.note{background:var(--glass);border:1px solid var(--rule);border-radius:16px;
+  padding:24px 28px;margin:32px 0;font-size:15.5px;color:var(--ink-2);line-height:1.68}
+.note b{color:var(--beam);font-family:var(--mono);font-weight:400;font-size:10px;letter-spacing:.24em;
+  text-transform:uppercase;display:block;margin-bottom:12px}
+.note p{margin:0;max-width:70ch}
+
+/* ── telemetry tiles ──────────────────────────────── */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:32px 0}
+.stat{background:var(--glass);border:1px solid var(--rule);border-radius:14px;padding:24px 22px 20px;
+  position:relative;overflow:hidden;transition:border-color .2s,transform .2s}
+.stat::before{content:"";position:absolute;left:22px;right:22px;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--rule),transparent)}
+.stat:hover{border-color:rgba(255,255,255,.16);transform:translateY(-2px)}
+.stat .v{font-family:var(--disp);font-weight:200;font-size:38px;letter-spacing:-.045em;
+  line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
+.stat .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);margin-top:14px;line-height:1.7}
+.stat.b .v{color:var(--beam);text-shadow:0 0 18px rgba(95,224,240,.22)}
+.stat.c .v{color:var(--crimson);text-shadow:0 0 26px rgba(226,86,142,.3)}
+.stat.s .v{color:var(--ink-2)}
+
+footer{padding-block:56px 0;font-size:13px;color:var(--ink-3);line-height:1.75;
+  border-top:1px solid var(--rule-2)}
+footer p{max-width:76ch;margin:0 0 14px}
+footer strong{color:var(--ink-2);font-weight:600}
+@media (max-width:640px){
+  body{font-size:16px}
+  .wrap{padding-inline:18px}
+  .hero{grid-template-columns:1fr;gap:20px;padding:28px 24px}
+  .mast{padding-block:52px 40px}
+  section{padding-block:52px}
+  .pull{padding:24px 26px}
+  .stats{grid-template-columns:1fr 1fr;gap:10px}
+  .stat{padding:18px 16px 16px}.stat .v{font-size:30px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="mast">
+  <p class="kicker">53 quarterbacks · 142 drafts · Jimmy Johnson value chart</p>
+  <h1>Belichick never bought a quarterback</h1>
+  <p class="dek">The charge is that he can't evaluate the position. Priced properly — in draft capital spent against NFL starts produced — <b>he is the most efficient quarterback drafter of his generation, and it isn't close.</b> The real criticism is a different one, and it survives.</p>
+  <div class="hero">
+    <div class="fig" id="heroFig">1.7</div>
+    <div class="cap">Points of <b>net draft capital</b> Belichick spent per career NFL start his quarterbacks produced. Kyle Shanahan paid <b>40.7</b>. Andy Reid paid <b>10.6</b>. Even with Tom Brady deleted from the record, Belichick pays <b>3.6</b>.</div>
+  </div>
+</header>
+
+<section>
+  <p class="eyebrow">The unit</p>
+  <h2>A draft pick is a price</h2>
+  <p class="lede">A draft is a trade: you give up a pick, you get a player. So every quarterback a coach drafts has a sticker price, and the Jimmy Johnson chart is the price list the league has used since 1991.</p>
+  <p>It was built for Dallas by executive Mike McCoy, reverse-engineered from what teams actually paid each other for picks. The first pick costs 3,000 points. The 32nd costs 590. The 199th costs <span class="tag">11.8</span>.</p>
+  <p>That last number is the whole argument in one line. <strong>Tom Brady cost eleven point eight points</strong> — four tenths of one percent of the first overall pick, and about the going rate for a seventh-rounder who never plays a down.</p>
+  <figure><div class="chartbox">
+    <p class="chart-t">What the chart charges</p>
+    <p class="chart-s">Jimmy Johnson points by overall pick, 1–224. The curve is nearly vertical for twenty picks and then flat for two hundred.</p>
+    <div id="c1"></div>
+  </div>
+  <figcaption>The chart stops at 224 — it was written when a seven-round draft ended there. Modern drafts run past 260 on compensatory picks, so picks 225+ are priced at 1 point here rather than zero. That is generous to Brock Purdy, taken 262nd.</figcaption></figure>
+</section>
+
+<section>
+  <p class="eyebrow">The league table</p>
+  <h2>Seven coaches, every quarterback they ever drafted</h2>
+  <p>Gross capital is what each pick cost at its slot, plus the full price of any trade up. Recouped is what came back when the coach traded that quarterback away — a real and usually ignored part of the ledger. Career starts are league-wide, not just for the drafting team, because a backup behind a franchise quarterback isn't being allowed to fail.</p>
+  <div class="scroll"><table>
+    <thead><tr>
+      <th>Coach</th><th class="n">QBs</th><th class="n">Gross</th><th class="n">Recouped</th>
+      <th class="n">Net</th><th class="n">Starts</th><th class="n">Pro&nbsp;Bowls</th>
+      <th class="n">Net / start</th><th></th>
+    </tr></thead>
+    <tbody id="tblCoach"></tbody>
+    <caption>Sorted by net capital per career start — lower is better. Trade-ups priced at what was actually sent: Mahomes cost 1,596, not 1,300; Trey Lance cost 2,572, not 2,200.</caption>
+  </table></div>
+  <div class="stats">
+    <div class="stat b"><div class="v">2,151</div><div class="k">Belichick's entire gross QB spend, 29 drafts</div></div>
+    <div class="stat s"><div class="v">2,600</div><div class="k">What Reid spent on McNabb alone (pick #2)</div></div>
+    <div class="stat s"><div class="v">2,654</div><div class="k">What Shanahan spent on four QBs</div></div>
+    <div class="stat b"><div class="v">633</div><div class="k">Career starts by Belichick's QBs — most in the sample</div></div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Capital in, starts out</p>
+  <h2>What each coach paid, and what showed up</h2>
+  <div class="legend">
+    <span><i style="background:var(--brass)"></i>Belichick</span>
+    <span><i style="background:var(--steel)"></i>Everyone else</span>
+    <span><i style="background:var(--crimson)"></i>Belichick without Brady</span>
+  </div>
+  <figure><div class="chartbox">
+    <p class="chart-t">Net draft capital spent vs. career starts produced</p>
+    <p class="chart-s">Up and to the left is good: cheap quarterbacks who played a lot. The diagonal is the sample's average exchange rate.</p>
+    <div id="c2"></div>
+  </div>
+  <figcaption>Belichick sits alone in the corner. Strip Brady out entirely and he is still further up and left than Reid, Carroll, Tomlin, Payton or Shanahan.</figcaption></figure>
+</section>
+
+<section>
+  <p class="eyebrow">The Brady test</p>
+  <h2>Delete every coach's best quarterback</h2>
+  <p class="lede">The obvious objection: Belichick's record is one player. True — but so is everyone's. Every coach here has exactly one quarterback holding up his entire case, and taking that player away is the fair test applied evenly.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Coach, minus his best QB</th><th class="n">QBs left</th><th class="n">Net capital</th>
+      <th class="n">Starts</th><th class="n">Pro Bowls</th><th class="n">Net / start</th></tr></thead>
+    <tbody id="tblEx"></tbody>
+    <caption>Mike Tomlin is absent because he has no quarterback to remove: eight drafted in twenty drafts, zero Pro Bowls, zero 30-start seasons of a career between them.</caption>
+  </table></div>
+  <p>Without Brady, Belichick's remaining fourteen quarterbacks started <strong>300 NFL games</strong> — more than Andy Reid's nine non-Mahomes quarterbacks managed (259), on less than half the capital after trades. Two of them made Pro Bowls: Matt Cassel in 2010 and Mac Jones in 2021. Strip Mahomes from Reid, Purdy from Shanahan, Wilson from Carroll, and what's left produces nothing at all.</p>
+  <div class="pull">
+    <p>Every coach in this sample is a one-quarterback coach. The difference is what the one quarterback cost. Brady cost 11.8 points. Mahomes cost 1,596. Wilson cost 215. Lamar Jackson cost 590.</p>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">The book</p>
+  <h2>Belichick's fifteen quarterbacks, pick by pick</h2>
+  <p>Two in Cleveland, thirteen in New England. Six never started an NFL game. One is the best player in the sport's history. The column that nobody counts is the last one.</p>
+  <div class="scroll"><table>
+    <thead><tr><th class="n">Pick</th><th>Player</th><th class="n">Year</th><th class="n">Cost</th>
+      <th class="n">Returned</th><th class="n">Net</th><th class="n">Starts</th><th class="n">PB</th><th>Exit</th></tr></thead>
+    <tbody id="tblBB"></tbody>
+    <caption>Cost and return in Jimmy Johnson points. A negative net means the pick came back at a profit. Mac Jones was traded to Jacksonville in March 2024, two months after Belichick left — that return belongs to Eliot Wolf, not to this ledger.</caption>
+  </table></div>
+  <div class="stats">
+    <div class="stat b"><div class="v">49%</div><div class="k">Of his QB capital came back in trades</div></div>
+    <div class="stat s"><div class="v">560×</div><div class="k">Return on Cassel: cost pick 230, brought back pick 34</div></div>
+    <div class="stat c"><div class="v">1,050</div><div class="k">Points on Mac Jones alone — 49% of the whole budget</div></div>
+    <div class="stat b"><div class="v">1,103</div><div class="k">Net QB capital, 29 drafts — the price of pick #14</div></div>
+  </div>
+  <div class="note"><b>The free one</b><p>Brian Hoyer went undrafted in 2009 and New England signed him. He started 41 NFL games across fifteen seasons and eight franchises — more than Bo Nix, who cost Sean Payton the 12th overall pick and 1,200 points. Hoyer cost nothing and isn't in any table here, which is itself the point: the pipeline was never about the picks.</p></div>
+</section>
+
+<section>
+  <p class="eyebrow">The base rate</p>
+  <h2>Round one works, and it is a terrible deal</h2>
+  <p class="lede">Pool all 53 quarterbacks and sort them by where they were taken. Both halves of the answer are uncomfortable.</p>
+  <figure><div class="chartbox">
+    <p class="chart-t">Jimmy Johnson points paid per career start, by draft range</p>
+    <p class="chart-s">All seven coaches pooled; 2026 rookies excluded. A first-round quarterback costs about 158 times as much per start as one taken after pick 224.</p>
+    <div id="c3"></div>
+  </div></figure>
+  <div class="scroll"><table>
+    <thead><tr><th>Where taken</th><th class="n">QBs</th><th class="n">Capital</th><th class="n">Starts</th>
+      <th class="n">Made a Pro Bowl</th><th class="n">Points / start</th><th>Who hit</th></tr></thead>
+    <tbody id="tblBkt"></tbody>
+  </table></div>
+  <p>First-rounders hit far more often — five of eight made a Pro Bowl, against two of nineteen in rounds five through seven. Anyone claiming the draft is pure noise is wrong. But the first-rounders consumed 11,358 points to produce 719 starts, and the picks after #224 consumed 7 points to produce 128. Scouting works. Paying for it is the losing half of the trade, and Belichick is the only coach here who consistently refused to.</p>
+</section>
+
+<section>
+  <p class="eyebrow">The charge that survives</p>
+  <h2>He was cheap because he had Brady, and then he wasn't</h2>
+  <p>Two honest objections remain, and the numbers support both.</p>
+  <p><strong>One: the efficiency is partly circumstance.</strong> For nineteen years Belichick didn't need a quarterback, so he bought lottery tickets instead of groceries. That is a cheap portfolio by necessity, not only by insight. A coach who must start a rookie cannot take a flier at 219 and wait.</p>
+  <p><strong>Two: the one time he had to solve it, he didn't.</strong> Mac Jones at pick 15 cost 1,050 points — <strong>49% of everything Belichick ever spent on the position across 29 drafts</strong> — and produced 57 starts and one replacement Pro Bowl before being traded for a sixth-rounder. After that came Bailey Zappe at 137. New England went 4–13 in his final season, and the quarterback room was the reason. He drafted no quarterback at all in 2023.</p>
+  <p>So the defensible version is narrow and specific: <em>after Brady, Belichick did not solve the position, and his one real swing missed.</em> That is true. It is also true of almost everyone — Shanahan's swing missed by 2,572 points and Tomlin has missed eight times in a row.</p>
+  <div class="pull">
+    <p>"Bad at evaluating quarterbacks" describes a man who spends heavily and picks wrong. Belichick spent less on the position than any coach of his era, recouped half of it in trades, and found the best quarterback who ever played in the sixth round. Whatever went wrong in New England after 2019, that isn't it.</p>
+    <p class="src">The verdict</p>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Method.</strong> Draft capital priced on the original Jimmy Johnson chart (picks 1–224; picks past 224 valued at 1 point). A pick's cost is its slot value, except where the team traded up specifically to take that quarterback, in which case the cost is the full value of every pick sent — this applies to Mahomes (1,596), Trey Lance (2,572) and C.J. Beathard (79.8). Capital recouped is the slot value of picks received when the drafting coach later traded that quarterback; Cassel's return is credited in full although Mike Vrabel was in the package, and Kevin Kolb's although Dominique Rodgers-Cromartie was. Pro Bowls and starts are career-wide, all teams. 2026 rookies (Nussmeier, Allar, Mendoza) and 2025 picks who have not yet played are excluded from rate statistics but carried in capital totals. Cleveland 1991–92 picks are included though Ernie Accorsi was still general manager; removing Keithen McCant changes nothing.</p>
+  <p><strong>Known limits.</strong> The Johnson chart overprices the top of the board — it was fitted to what teams paid, not to what picks produced — so it flatters any strategy that avoids round one, including this one. Career starts reward longevity and durability as much as quality, and Pro Bowls are a popularity vote. Foles' pick arrived bundled with DeMeco Ryans and can't be cleanly attributed. Figures are through the end of the 2025 season.</p>
+  <p><strong>Sources.</strong> Pick numbers, Pro Bowls, All-Pros and career starts from Pro-Football-Reference player and team draft pages; trade terms from PFR team transaction logs, cross-checked against contemporaneous reporting. Chart values cross-checked across Pro-Football-Reference, WalterFootball and Football Perspective.</p>
+</footer>
+</div>
+
+<script type="application/json" id="D">{"coaches": [{"label": "Belichick", "n": 15, "n_live": 15, "drafts": 29, "gross_sticker": 2150.6, "gross_true": 2150.6, "recoup": 1047.8, "net": 1102.8, "gs": 633, "pb": 17, "ap": 3, "n_probowlers": 3, "pb_rate": 20.0, "n_100gs": 1, "n_30gs": 5, "never_played": 6, "avg_slot": 148.1, "med_slot": 133, "cap_per_gs": 3.4, "net_per_gs": 1.74, "cap_per_pb": 126.5, "cap_per_starter": 430.1, "qbs_per_draft": 0.52, "team": "CLE 1991-95 / NE 2000-23", "picks": [{"n": "Mac Jones", "y": 2021, "p": 15, "gs": 57, "pb": 1, "ap": 0, "sticker": 1050, "true": 1050, "recoup": 0.0, "rookie": false, "note": "", "rnote": "traded 2024, after Belichick", "tnote": ""}, {"n": "Jimmy Garoppolo", "y": 2014, "p": 62, "gs": 64, "pb": 0, "ap": 0, "sticker": 284, "true": 284, "recoup": 470, "rookie": false, "note": "", "rnote": "traded to SF for #43", "tnote": ""}, {"n": "Ryan Mallett", "y": 2011, "p": 74, "gs": 8, "pb": 0, "ap": 0, "sticker": 220, "true": 220, "recoup": 1.0, "rookie": false, "note": "", "rnote": "traded to HOU for #243", "tnote": ""}, {"n": "Eric Zeier", "y": 1995, "p": 84, "gs": 12, "pb": 0, "ap": 0, "sticker": 170, "true": 170, "recoup": 0.0, "rookie": false, "note": "", "rnote": "stayed with the franchise move", "tnote": ""}, {"n": "Jacoby Brissett", "y": 2016, "p": 91, "gs": 65, "pb": 0, "ap": 0, "sticker": 136, "true": 136, "recoup": 0.0, "rookie": false, "note": "", "rnote": "traded to IND for WR Dorsett, no pick", "tnote": ""}, {"n": "Kevin O'Connell", "y": 2008, "p": 94, "gs": 0, "pb": 0, "ap": 0, "sticker": 124, "true": 124, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Rohan Davey", "y": 2002, "p": 117, "gs": 0, "pb": 0, "ap": 0, "sticker": 60, "true": 60, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Jarrett Stidham", "y": 2019, "p": 133, "gs": 4, "pb": 0, "ap": 0, "sticker": 39.5, "true": 39.5, "recoup": 16.8, "rookie": false, "note": "", "rnote": "traded to LV: +#184, -#231", "tnote": ""}, {"n": "Bailey Zappe", "y": 2022, "p": 137, "gs": 9, "pb": 0, "ap": 0, "sticker": 37.5, "true": 37.5, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Tom Brady", "y": 2000, "p": 199, "gs": 333, "pb": 15, "ap": 3, "sticker": 11.8, "true": 11.8, "recoup": 0.0, "rookie": false, "note": "", "rnote": "left in free agency, 2020", "tnote": ""}, {"n": "Kliff Kingsbury", "y": 2003, "p": 201, "gs": 0, "pb": 0, "ap": 0, "sticker": 11, "true": 11, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Danny Etling", "y": 2018, "p": 219, "gs": 0, "pb": 0, "ap": 0, "sticker": 3.8, "true": 3.8, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Matt Cassel", "y": 2005, "p": 230, "gs": 81, "pb": 1, "ap": 0, "sticker": 1.0, "true": 1.0, "recoup": 560, "rookie": false, "note": "", "rnote": "traded w/ Vrabel to KC for #34", "tnote": ""}, {"n": "Zac Robinson", "y": 2010, "p": 250, "gs": 0, "pb": 0, "ap": 0, "sticker": 1.0, "true": 1.0, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Keithen McCant", "y": 1992, "p": 316, "gs": 0, "pb": 0, "ap": 0, "sticker": 1.0, "true": 1.0, "recoup": 0.0, "rookie": false, "note": "Accorsi still GM", "rnote": "cut in camp", "tnote": ""}]}, {"label": "Harbaugh", "n": 6, "n_live": 6, "drafts": 19, "gross_sticker": 1540.0, "gross_true": 1540.0, "recoup": 0.0, "net": 1540.0, "gs": 371, "pb": 6, "ap": 3, "n_probowlers": 3, "pb_rate": 50.0, "n_100gs": 2, "n_30gs": 3, "never_played": 2, "avg_slot": 139.8, "med_slot": 187.0, "cap_per_gs": 4.15, "net_per_gs": 4.15, "cap_per_pb": 256.7, "cap_per_starter": 513.3, "qbs_per_draft": 0.32, "team": "BAL 2008-26", "picks": [{"n": "Joe Flacco", "y": 2008, "p": 18, "gs": 201, "pb": 1, "ap": 0, "sticker": 900, "true": 900, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Lamar Jackson", "y": 2018, "p": 32, "gs": 107, "pb": 4, "ap": 3, "sticker": 590, "true": 590, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Tyrod Taylor", "y": 2011, "p": 180, "gs": 62, "pb": 1, "ap": 0, "sticker": 19.4, "true": 19.4, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Keith Wenning", "y": 2014, "p": 194, "gs": 0, "pb": 0, "ap": 0, "sticker": 13.8, "true": 13.8, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Trace McSorley", "y": 2019, "p": 197, "gs": 1, "pb": 0, "ap": 0, "sticker": 12.6, "true": 12.6, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Devin Leary", "y": 2024, "p": 218, "gs": 0, "pb": 0, "ap": 0, "sticker": 4.2, "true": 4.2, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}]}, {"label": "Reid", "n": 10, "n_live": 9, "drafts": 28, "gross_sticker": 4740.6, "gross_true": 5036.6, "recoup": 940.0, "net": 4096.6, "gs": 385, "pb": 13, "ap": 2, "n_probowlers": 3, "pb_rate": 33.3, "n_100gs": 2, "n_30gs": 3, "never_played": 3, "avg_slot": 117.2, "med_slot": 138.5, "cap_per_gs": 13.08, "net_per_gs": 10.64, "cap_per_pb": 387.4, "cap_per_starter": 1678.9, "qbs_per_draft": 0.36, "team": "PHI 1999-2012 / KC 2013-26", "picks": [{"n": "Donovan McNabb", "y": 1999, "p": 2, "gs": 161, "pb": 6, "ap": 0, "sticker": 2600, "true": 2600, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Patrick Mahomes", "y": 2017, "p": 10, "gs": 126, "pb": 6, "ap": 2, "sticker": 1300, "true": 1596, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": "sent #27+#91+2018 1st(#22) to BUF"}, {"n": "Kevin Kolb", "y": 2007, "p": 36, "gs": 21, "pb": 0, "ap": 0, "sticker": 540, "true": 540, "recoup": 390, "rookie": false, "note": "", "rnote": "traded to ARI for DRC + #51", "tnote": ""}, {"n": "Nick Foles", "y": 2012, "p": 88, "gs": 58, "pb": 1, "ap": 0, "sticker": 150, "true": 150, "recoup": 0.0, "rookie": false, "note": "#88 came bundled w/ DeMeco Ryans", "rnote": "", "tnote": ""}, {"n": "Mike Kafka", "y": 2010, "p": 122, "gs": 0, "pb": 0, "ap": 0, "sticker": 50, "true": 50, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "A.J. Feeley", "y": 2001, "p": 155, "gs": 18, "pb": 0, "ap": 0, "sticker": 29.4, "true": 29.4, "recoup": 550, "rookie": false, "note": "", "rnote": "traded to MIA for #35", "tnote": ""}, {"n": "Kevin Hogan", "y": 2016, "p": 162, "gs": 1, "pb": 0, "ap": 0, "sticker": 26.6, "true": 26.6, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Aaron Murray", "y": 2014, "p": 163, "gs": 0, "pb": 0, "ap": 0, "sticker": 26.2, "true": 26.2, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Andy Hall", "y": 2004, "p": 185, "gs": 0, "pb": 0, "ap": 0, "sticker": 17.4, "true": 17.4, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Garrett Nussmeier", "y": 2026, "p": 249, "gs": 0, "pb": 0, "ap": 0, "sticker": 1.0, "true": 1.0, "recoup": 0.0, "rookie": true, "note": "", "rnote": "", "tnote": ""}]}, {"label": "Carroll", "n": 5, "n_live": 4, "drafts": 16, "gross_sticker": 3230.0, "gross_true": 3230.0, "recoup": 0.0, "net": 3230.0, "gs": 202, "pb": 10, "ap": 0, "n_probowlers": 1, "pb_rate": 25.0, "n_100gs": 1, "n_30gs": 1, "never_played": 3, "avg_slot": 144.8, "med_slot": 213, "cap_per_gs": 15.99, "net_per_gs": 15.99, "cap_per_pb": 323.0, "cap_per_starter": 3230.0, "qbs_per_draft": 0.31, "team": "SEA 2010-23 / LV 2025-26", "picks": [{"n": "Fernando Mendoza", "y": 2026, "p": 1, "gs": 0, "pb": 0, "ap": 0, "sticker": 3000, "true": 3000, "recoup": 0.0, "rookie": true, "note": "", "rnote": "", "tnote": ""}, {"n": "Russell Wilson", "y": 2012, "p": 75, "gs": 202, "pb": 10, "ap": 0, "sticker": 215, "true": 215, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Tommy Mellott", "y": 2025, "p": 213, "gs": 0, "pb": 0, "ap": 0, "sticker": 6.2, "true": 6.2, "recoup": 0.0, "rookie": false, "note": "moved to WR, cut", "rnote": "", "tnote": ""}, {"n": "Cam Miller", "y": 2025, "p": 215, "gs": 0, "pb": 0, "ap": 0, "sticker": 5.4, "true": 5.4, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Alex McGough", "y": 2018, "p": 220, "gs": 0, "pb": 0, "ap": 0, "sticker": 3.4, "true": 3.4, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}]}, {"label": "Tomlin", "n": 8, "n_live": 6, "drafts": 20, "gross_sticker": 1419.9, "gross_true": 1419.9, "recoup": 0.0, "net": 1419.9, "gs": 71, "pb": 0, "ap": 0, "n_probowlers": 0, "pb_rate": 0.0, "n_100gs": 0, "n_30gs": 0, "never_played": 0, "avg_slot": 125.5, "med_slot": 125.0, "cap_per_gs": 20.0, "net_per_gs": 20.0, "cap_per_pb": null, "cap_per_starter": null, "qbs_per_draft": 0.4, "team": "PIT 2007-26", "picks": [{"n": "Kenny Pickett", "y": 2022, "p": 20, "gs": 27, "pb": 0, "ap": 0, "sticker": 850, "true": 850, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Mason Rudolph", "y": 2018, "p": 76, "gs": 19, "pb": 0, "ap": 0, "sticker": 210, "true": 210, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Drew Allar", "y": 2026, "p": 76, "gs": 0, "pb": 0, "ap": 0, "sticker": 210, "true": 210, "recoup": 0.0, "rookie": true, "note": "", "rnote": "", "tnote": ""}, {"n": "Landry Jones", "y": 2013, "p": 115, "gs": 5, "pb": 0, "ap": 0, "sticker": 64, "true": 64, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Joshua Dobbs", "y": 2017, "p": 135, "gs": 15, "pb": 0, "ap": 0, "sticker": 38.5, "true": 38.5, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Dennis Dixon", "y": 2008, "p": 156, "gs": 3, "pb": 0, "ap": 0, "sticker": 29, "true": 29, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Will Howard", "y": 2025, "p": 185, "gs": 0, "pb": 0, "ap": 0, "sticker": 17.4, "true": 17.4, "recoup": 0.0, "rookie": true, "note": "", "rnote": "", "tnote": ""}, {"n": "Chris Oladokun", "y": 2022, "p": 241, "gs": 2, "pb": 0, "ap": 0, "sticker": 1.0, "true": 1.0, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}]}, {"label": "Shanahan", "n": 4, "n_live": 3, "drafts": 10, "gross_sticker": 2288.0, "gross_true": 2653.8, "recoup": 48.0, "net": 2605.8, "gs": 64, "pb": 1, "ap": 0, "n_probowlers": 1, "pb_rate": 33.3, "n_100gs": 0, "n_30gs": 1, "never_played": 0, "avg_slot": 149, "med_slot": 165.5, "cap_per_gs": 41.47, "net_per_gs": 40.72, "cap_per_pb": 2653.8, "cap_per_starter": 2653.8, "qbs_per_draft": 0.4, "team": "SF 2017-26", "picks": [{"n": "Trey Lance", "y": 2021, "p": 3, "gs": 6, "pb": 0, "ap": 0, "sticker": 2200, "true": 2572, "recoup": 48, "rookie": false, "note": "", "rnote": "traded to DAL for #124", "tnote": "sent #12 + 2022 1st(#29) + 2022 3rd(#102) + 2023 1st(#29) to MIA"}, {"n": "C.J. Beathard", "y": 2017, "p": 104, "gs": 13, "pb": 0, "ap": 0, "sticker": 86, "true": 79.8, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": "sent #109+#219 to MIN"}, {"n": "Kurtis Rourke", "y": 2025, "p": 227, "gs": 0, "pb": 0, "ap": 0, "sticker": 1.0, "true": 1.0, "recoup": 0.0, "rookie": true, "note": "", "rnote": "", "tnote": ""}, {"n": "Brock Purdy", "y": 2022, "p": 262, "gs": 45, "pb": 1, "ap": 0, "sticker": 1.0, "true": 1.0, "recoup": 0.0, "rookie": false, "note": "Mr. Irrelevant; comp pick earned for losing Beathard", "rnote": "", "tnote": ""}]}, {"label": "Payton", "n": 5, "n_live": 5, "drafts": 20, "gross_sticker": 1456.5, "gross_true": 1456.5, "recoup": 0.0, "net": 1456.5, "gs": 35, "pb": 0, "ap": 0, "n_probowlers": 0, "pb_rate": 0.0, "n_100gs": 0, "n_30gs": 1, "never_played": 3, "avg_slot": 139.8, "med_slot": 133, "cap_per_gs": 41.61, "net_per_gs": 41.61, "cap_per_pb": null, "cap_per_starter": 1456.5, "qbs_per_draft": 0.25, "team": "NO 2006-21 / DEN 2023-26", "picks": [{"n": "Bo Nix", "y": 2024, "p": 12, "gs": 34, "pb": 0, "ap": 0, "sticker": 1200, "true": 1200, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Garrett Grayson", "y": 2015, "p": 75, "gs": 0, "pb": 0, "ap": 0, "sticker": 215, "true": 215, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Ian Book", "y": 2021, "p": 133, "gs": 1, "pb": 0, "ap": 0, "sticker": 39.5, "true": 39.5, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Sean Canfield", "y": 2010, "p": 239, "gs": 0, "pb": 0, "ap": 0, "sticker": 1.0, "true": 1.0, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}, {"n": "Tommy Stevens", "y": 2020, "p": 240, "gs": 0, "pb": 0, "ap": 0, "sticker": 1.0, "true": 1.0, "recoup": 0.0, "rookie": false, "note": "", "rnote": "", "tnote": ""}]}], "ex": [{"label": "Harbaugh", "n": 5, "n_live": 5, "drafts": 19, "gross_sticker": 950.0, "gross_true": 950.0, "recoup": 0.0, "net": 950.0, "gs": 264, "pb": 2, "ap": 0, "n_probowlers": 2, "pb_rate": 40.0, "n_100gs": 1, "n_30gs": 2, "never_played": 2, "avg_slot": 161.4, "med_slot": 194, "cap_per_gs": 3.6, "net_per_gs": 3.6, "cap_per_pb": 475.0, "cap_per_starter": 475.0, "qbs_per_draft": 0.26, "removed": "Lamar Jackson", "full_net_per_gs": 4.15, "full_gs": 371, "full_pb": 6}, {"label": "Belichick", "n": 14, "n_live": 14, "drafts": 29, "gross_sticker": 2138.8, "gross_true": 2138.8, "recoup": 1047.8, "net": 1091.0, "gs": 300, "pb": 2, "ap": 0, "n_probowlers": 2, "pb_rate": 14.3, "n_100gs": 0, "n_30gs": 4, "never_played": 6, "avg_slot": 144.5, "med_slot": 125.0, "cap_per_gs": 7.13, "net_per_gs": 3.64, "cap_per_pb": 1069.4, "cap_per_starter": 534.7, "qbs_per_draft": 0.48, "removed": "Tom Brady", "full_net_per_gs": 1.74, "full_gs": 633, "full_pb": 17}, {"label": "Reid", "n": 9, "n_live": 8, "drafts": 28, "gross_sticker": 3440.6, "gross_true": 3440.6, "recoup": 940.0, "net": 2500.6, "gs": 259, "pb": 7, "ap": 0, "n_probowlers": 2, "pb_rate": 25.0, "n_100gs": 1, "n_30gs": 2, "never_played": 3, "avg_slot": 129.1, "med_slot": 155, "cap_per_gs": 13.28, "net_per_gs": 9.65, "cap_per_pb": 491.5, "cap_per_starter": 1720.3, "qbs_per_draft": 0.32, "removed": "Patrick Mahomes", "full_net_per_gs": 10.64, "full_gs": 385, "full_pb": 13}, {"label": "Shanahan", "n": 3, "n_live": 2, "drafts": 10, "gross_sticker": 2287.0, "gross_true": 2652.8, "recoup": 48.0, "net": 2604.8, "gs": 19, "pb": 0, "ap": 0, "n_probowlers": 0, "pb_rate": 0.0, "n_100gs": 0, "n_30gs": 0, "never_played": 0, "avg_slot": 111.3, "med_slot": 104, "cap_per_gs": 139.62, "net_per_gs": 137.09, "cap_per_pb": null, "cap_per_starter": null, "qbs_per_draft": 0.3, "removed": "Brock Purdy", "full_net_per_gs": 40.72, "full_gs": 64, "full_pb": 1}, {"label": "Payton", "n": 4, "n_live": 4, "drafts": 20, "gross_sticker": 256.5, "gross_true": 256.5, "recoup": 0.0, "net": 256.5, "gs": 1, "pb": 0, "ap": 0, "n_probowlers": 0, "pb_rate": 0.0, "n_100gs": 0, "n_30gs": 0, "never_played": 3, "avg_slot": 171.8, "med_slot": 186.0, "cap_per_gs": 256.5, "net_per_gs": 256.5, "cap_per_pb": null, "cap_per_starter": null, "qbs_per_draft": 0.2, "removed": "Bo Nix", "full_net_per_gs": 41.61, "full_gs": 35, "full_pb": 0}, {"label": "Carroll", "n": 4, "n_live": 3, "drafts": 16, "gross_sticker": 3015.0, "gross_true": 3015.0, "recoup": 0.0, "net": 3015.0, "gs": 0, "pb": 0, "ap": 0, "n_probowlers": 0, "pb_rate": 0.0, "n_100gs": 0, "n_30gs": 0, "never_played": 3, "avg_slot": 162.2, "med_slot": 214.0, "cap_per_gs": null, "net_per_gs": null, "cap_per_pb": null, "cap_per_starter": null, "qbs_per_draft": 0.25, "removed": "Russell Wilson", "full_net_per_gs": 15.99, "full_gs": 202, "full_pb": 10}], "buckets": [{"label": "Round 1", "n": 8, "cap": 11358, "gs": 719, "pb": 18, "pbers": 5, "rate": 62, "per_gs": 15.8, "names": ["Mac Jones", "Donovan McNabb", "Patrick Mahomes", "Joe Flacco", "Lamar Jackson"]}, {"label": "Round 2", "n": 2, "cap": 824, "gs": 85, "pb": 0, "pbers": 0, "rate": 0, "per_gs": 9.7, "names": []}, {"label": "Rounds 3\u20134", "n": 12, "cap": 1694, "gs": 382, "pb": 11, "pbers": 2, "rate": 17, "per_gs": 4.4, "names": ["Nick Foles", "Russell Wilson"]}, {"label": "Rounds 5\u20137", "n": 19, "cap": 375, "gs": 447, "pb": 16, "pbers": 2, "rate": 11, "per_gs": 0.8, "names": ["Tom Brady", "Tyrod Taylor"]}, {"label": "Past #224", "n": 7, "cap": 7, "gs": 128, "pb": 2, "pbers": 2, "rate": 29, "per_gs": 0.1, "names": ["Matt Cassel", "Brock Purdy"]}], "curve": [[1, 3000], [2, 2600], [3, 2200], [4, 1800], [5, 1700], [6, 1600], [7, 1500], [8, 1400], [9, 1350], [10, 1300], [11, 1250], [12, 1200], [13, 1150], [14, 1100], [15, 1050], [16, 1000], [17, 950], [18, 900], [19, 875], [20, 850], [21, 800], [22, 780], [23, 760], [24, 740], [25, 720], [26, 700], [27, 680], [28, 660], [29, 640], [30, 620], [31, 600], [32, 590], [33, 580], [34, 560], [35, 550], [36, 540], [37, 530], [38, 520], [39, 510], [40, 500], [41, 490], [42, 480], [43, 470], [44, 460], [45, 450], [46, 440], [47, 430], [48, 420], [49, 410], [50, 400], [51, 390], [52, 380], [53, 370], [54, 360], [55, 350], [56, 340], [57, 330], [58, 320], [59, 310], [60, 300], [61, 292], [62, 284], [63, 276], [64, 270], [65, 265], [66, 260], [67, 255], [68, 250], [69, 245], [70, 240], [71, 235], [72, 230], [73, 225], [74, 220], [75, 215], [76, 210], [77, 205], [78, 200], [79, 195], [80, 190], [81, 185], [82, 180], [83, 175], [84, 170], [85, 165], [86, 160], [87, 155], [88, 150], [89, 145], [90, 140], [91, 136], [92, 132], [93, 128], [94, 124], [95, 120], [96, 116], [97, 112], [98, 108], [99, 104], [100, 100], [101, 96], [102, 92], [103, 88], [104, 86], [105, 84], [106, 82], [107, 80], [108, 78], [109, 76], [110, 74], [111, 72], [112, 70], [113, 68], [114, 66], [115, 64], [116, 62], [117, 60], [118, 58], [119, 56], [120, 54], [121, 52], [122, 50], [123, 49], [124, 48], [125, 47], [126, 46], [127, 45], [128, 44], [129, 43], [130, 42], [131, 41], [132, 40], [133, 39.5], [134, 39], [135, 38.5], [136, 38], [137, 37.5], [138, 37], [139, 36.5], [140, 36], [141, 35.5], [142, 35], [143, 34.5], [144, 34], [145, 33.5], [146, 33], [147, 32.6], [148, 32.2], [149, 31.8], [150, 31.4], [151, 31], [152, 30.6], [153, 30.2], [154, 29.8], [155, 29.4], [156, 29], [157, 28.6], [158, 28.2], [159, 27.8], [160, 27.4], [161, 27], [162, 26.6], [163, 26.2], [164, 25.8], [165, 25.4], [166, 25], [167, 24.6], [168, 24.2], [169, 23.8], [170, 23.4], [171, 23], [172, 22.6], [173, 22.2], [174, 21.8], [175, 21.4], [176, 21], [177, 20.6], [178, 20.2], [179, 19.8], [180, 19.4], [181, 19], [182, 18.6], [183, 18.2], [184, 17.8], [185, 17.4], [186, 17], [187, 16.6], [188, 16.2], [189, 15.8], [190, 15.4], [191, 15], [192, 14.6], [193, 14.2], [194, 13.8], [195, 13.4], [196, 13], [197, 12.6], [198, 12.2], [199, 11.8], [200, 11.4], [201, 11], [202, 10.6], [203, 10.2], [204, 9.8], [205, 9.4], [206, 9], [207, 8.6], [208, 8.2], [209, 7.8], [210, 7.4], [211, 7], [212, 6.6], [213, 6.2], [214, 5.8], [215, 5.4], [216, 5], [217, 4.6], [218, 4.2], [219, 3.8], [220, 3.4], [221, 3], [222, 2.6], [223, 2.3], [224, 2]]}</script>
+<script>
+(function(){
+const D=JSON.parse(document.getElementById("D").textContent);
+const f=(n,d)=>n==null?"—":n.toLocaleString("en-US",{minimumFractionDigits:d??0,maximumFractionDigits:d??0});
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+
+/* ---------- tables ---------- */
+const maxNPS=Math.max(...D.coaches.map(c=>c.net_per_gs||0));
+document.getElementById("tblCoach").innerHTML=D.coaches.map(c=>{
+  const w=Math.max(2,Math.round(126*(c.net_per_gs||0)/maxNPS)), b=c.label==="Belichick";
+  return `<tr class="${b?"hi":""}">
+   <td class="name">${c.label}<div class="sub" style="font-weight:400">${esc(c.team)}</div></td>
+   <td class="n">${c.n}</td><td class="n">${f(c.gross_true)}</td>
+   <td class="n">${c.recoup?f(c.recoup):'<span class="zero">—</span>'}</td>
+   <td class="n">${f(c.net)}</td><td class="n">${f(c.gs)}</td><td class="n">${c.pb||'<span class="zero">0</span>'}</td>
+   <td class="n"><strong>${c.net_per_gs.toFixed(1)}</strong></td>
+   <td class="barcell"><span class="bar${b?" b":""}" style="width:${w}px"></span></td></tr>`;}).join("");
+
+document.getElementById("tblEx").innerHTML=D.ex.map(c=>{
+  const b=c.label==="Belichick";
+  return `<tr class="${b?"hi":""}"><td class="name">${c.label}<div class="sub" style="font-weight:400">−${esc(c.removed)}</div></td>
+   <td class="n">${c.n}</td><td class="n">${f(c.net)}</td><td class="n">${f(c.gs)}</td>
+   <td class="n">${c.pb||'<span class="zero">0</span>'}</td>
+   <td class="n"><strong>${c.net_per_gs==null?"—":c.net_per_gs.toFixed(1)}</strong></td></tr>`;}).join("");
+
+const BB=D.coaches.find(c=>c.label==="Belichick");
+document.getElementById("tblBB").innerHTML=BB.picks.map(q=>{
+  const net=q.true-q.recoup, hi=q.n==="Tom Brady", mj=q.n==="Mac Jones";
+  return `<tr class="${hi?"hi":""}"><td class="n mono">${q.p}</td>
+   <td class="name" ${mj?'style="color:var(--crimson)"':""}>${esc(q.n)}</td><td class="n">${q.y}</td>
+   <td class="n">${q.true<10?q.true.toFixed(1):f(q.true)}</td>
+   <td class="n">${q.recoup?f(q.recoup,1):'<span class="zero">—</span>'}</td>
+   <td class="n" ${net<0?'style="color:var(--steel)"':""}>${net<10&&net>-10?net.toFixed(1):f(net)}</td>
+   <td class="n">${q.gs||'<span class="zero">0</span>'}</td>
+   <td class="n">${q.pb||'<span class="zero">—</span>'}</td>
+   <td class="sub">${esc(q.rnote||"released")}</td></tr>`;}).join("");
+
+document.getElementById("tblBkt").innerHTML=D.buckets.map(b=>
+  `<tr><td class="name">${esc(b.label)}</td><td class="n">${b.n}</td><td class="n">${f(b.cap)}</td>
+   <td class="n">${f(b.gs)}</td><td class="n">${b.pbers} of ${b.n} &nbsp;<span class="sub">${b.rate}%</span></td>
+   <td class="n"><strong>${b.per_gs.toFixed(1)}</strong></td>
+   <td class="sub">${b.names.length?esc(b.names.join(", ")):"nobody"}</td></tr>`).join("");
+
+/* ---------- tooltip ---------- */
+function tipFor(box){const t=document.createElement("div");t.className="tip";box.appendChild(t);return t;}
+function show(t,box,ev,html){t.innerHTML=html;t.style.opacity=1;
+  const r=box.getBoundingClientRect();t.style.left=(ev.clientX-r.left)+"px";t.style.top=(ev.clientY-r.top)+"px";}
+const hide=t=>t.style.opacity=0;
+
+/* ---------- chart 1: price curve ---------- */
+(function(){
+  const box=document.getElementById("c1"),tip=tipFor(box);
+  const W=880,H=280,M={t:14,r:16,b:38,l:52};
+  const iw=W-M.l-M.r, ih=H-M.t-M.b, pts=D.curve;
+  const x=p=>M.l+(p-1)/223*iw, y=v=>M.t+ih-(v/3000)*ih;
+  const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":"Jimmy Johnson chart value by draft pick"});
+  [0,750,1500,2250,3000].forEach(v=>{
+    s.appendChild(el("line",{x1:M.l,x2:W-M.r,y1:y(v),y2:y(v),stroke:css("--rule"),"stroke-width":1}));
+    const tx=el("text",{x:M.l-9,y:y(v)+4,"text-anchor":"end",fill:css("--ink-3"),
+      "font-family":"JetBrains Mono, monospace","font-size":11});tx.textContent=v.toLocaleString();s.appendChild(tx);});
+  let d=`M ${x(1)} ${y(pts[0][1])}`;pts.forEach(p=>d+=` L ${x(p[0])} ${y(p[1])}`);
+  const area=el("path",{d:d+` L ${x(224)} ${y(0)} L ${x(1)} ${y(0)} Z`,fill:css("--steel"),opacity:.2});
+  s.appendChild(area);
+  s.appendChild(el("path",{d,fill:"none",stroke:css("--steel"),"stroke-width":2,"stroke-linejoin":"round"}));
+  [[1,"#1 · 3,000"],[64,"#64"],[128,"#128"],[224,"#224"]].forEach(([p,l])=>{
+    const tx=el("text",{x:x(p),y:H-14,"text-anchor":p===1?"start":p===224?"end":"middle",
+      fill:css("--ink-3"),"font-family":"JetBrains Mono, monospace","font-size":11});
+    tx.textContent=l;s.appendChild(tx);});
+  const marks=[[3,2200,"Trey Lance"],[15,1050,"Mac Jones"],[32,590,"Lamar Jackson"],
+               [75,215,"Russell Wilson"],[199,11.8,"Brady"]];
+  marks.forEach(([p,v,n])=>{
+    const brady=n==="Brady", c=brady?css("--brass"):css("--ink-2");
+    s.appendChild(el("circle",{cx:x(p),cy:y(v),r:brady?5.5:3.5,fill:c,
+      stroke:css("--surface"),"stroke-width":2}));
+    const tx=el("text",{x:x(p)+(brady?-12:16),y:y(v)+(brady?-13:4),
+      "text-anchor":brady?"end":"start",fill:c,"paint-order":"stroke",stroke:css("--surface"),"stroke-width":3.5,"stroke-linejoin":"round",
+      "font-family":"JetBrains Mono, monospace","font-size":11.5,"font-weight":brady?600:400});
+    tx.textContent=`${n} · ${v.toLocaleString()}`;s.appendChild(tx);});
+  const hit=el("rect",{x:M.l,y:M.t,width:iw,height:ih,fill:"transparent"});
+  hit.addEventListener("mousemove",e=>{const r=s.getBoundingClientRect();
+    const p=Math.max(1,Math.min(224,Math.round(1+((e.clientX-r.left)/r.width*W-M.l)/iw*223)));
+    show(tip,box,e,`<b>Pick ${p}</b><br>${pts[p-1][1].toLocaleString()} points`);});
+  hit.addEventListener("mouseleave",()=>hide(tip));
+  s.appendChild(hit);box.appendChild(s);
+})();
+
+/* ---------- chart 2: scatter ---------- */
+(function(){
+  const box=document.getElementById("c2"),tip=tipFor(box);
+  const W=880,H=420,M={t:18,r:24,b:52,l:60};
+  const iw=W-M.l-M.r,ih=H-M.t-M.b;
+  const bb=D.ex.find(c=>c.label==="Belichick");
+  const pts=D.coaches.map(c=>({l:c.label,x:c.net,y:c.gs,pb:c.pb,n:c.n,k:"m"}))
+    .concat([{l:"Belichick ex-Brady",x:bb.net,y:bb.gs,pb:bb.pb,n:bb.n,k:"x"}]);
+  const XM=4400,YM=700;
+  const X=v=>M.l+v/XM*iw, Y=v=>M.t+ih-v/YM*ih;
+  const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":"Net draft capital versus career starts, by coach"});
+  for(let v=0;v<=YM;v+=140){s.appendChild(el("line",{x1:M.l,x2:W-M.r,y1:Y(v),y2:Y(v),stroke:css("--rule"),"stroke-width":1}));
+    const t=el("text",{x:M.l-10,y:Y(v)+4,"text-anchor":"end",fill:css("--ink-3"),"font-family":"JetBrains Mono, monospace","font-size":11});
+    t.textContent=v;s.appendChild(t);}
+  for(let v=0;v<=XM;v+=1100){const t=el("text",{x:X(v),y:H-30,"text-anchor":v===0?"start":"middle",fill:css("--ink-3"),"font-family":"JetBrains Mono, monospace","font-size":11});
+    t.textContent=v.toLocaleString();s.appendChild(t);}
+  const at=el("text",{x:M.l,y:H-10,fill:css("--ink-3"),"font-family":"JetBrains Mono, monospace","font-size":10.5,"letter-spacing":"0.09em"});
+  at.textContent="NET DRAFT CAPITAL (JJ POINTS) →";s.appendChild(at);
+  const ay=el("text",{x:0,y:0,fill:css("--ink-3"),"font-family":"JetBrains Mono, monospace","font-size":10.5,"letter-spacing":"0.09em",
+    transform:`translate(16,${M.t+ih}) rotate(-90)`});ay.textContent="CAREER NFL STARTS →";s.appendChild(ay);
+  const tot={c:D.coaches.reduce((a,b)=>a+b.net,0),g:D.coaches.reduce((a,b)=>a+b.gs,0)};
+  const slope=tot.g/tot.c;
+  s.appendChild(el("line",{x1:X(0),y1:Y(0),x2:X(XM),y2:Y(Math.min(YM,XM*slope)),
+    stroke:css("--ink-3"),"stroke-width":1.5,"stroke-dasharray":"4 6",opacity:.45}));
+  const sl=el("text",{x:X(XM)-6,y:Y(XM*slope)-9,"text-anchor":"end",fill:css("--ink-3"),
+    "font-family":"JetBrains Mono, monospace","font-size":10.5});sl.textContent="sample average";s.appendChild(sl);
+  const off={Belichick:[14,-6],"Belichick ex-Brady":[14,4],Harbaugh:[14,4],Reid:[-14,4],
+             Carroll:[14,4],Tomlin:[14,4],Shanahan:[-14,4],Payton:[14,4]};
+  pts.forEach(p=>{
+    const bel=p.l==="Belichick", ex=p.k==="x";
+    const c=bel?css("--brass"):ex?css("--crimson"):css("--steel");
+    const g=el("g",{});
+    g.appendChild(el("circle",{cx:X(p.x),cy:Y(p.y),r:bel?9:ex?7:7,fill:c,
+      stroke:css("--surface"),"stroke-width":2,opacity:ex?1:1,
+      "stroke-dasharray":ex?"3 2":"none"}));
+    const o=off[p.l]||[14,4];
+    const t=el("text",{x:X(p.x)+o[0],y:Y(p.y)+o[1],"text-anchor":o[0]<0?"end":"start",fill:bel?css("--brass"):ex?css("--crimson"):css("--ink-2"),"paint-order":"stroke",stroke:css("--surface"),"stroke-width":3.5,"stroke-linejoin":"round",
+      "font-family":"Sora, sans-serif","font-size":bel?14:12.5,"font-weight":bel?600:500});
+    t.textContent=p.l;g.appendChild(t);
+    g.style.cursor="crosshair";
+    g.addEventListener("mousemove",e=>show(tip,box,e,
+      `<b>${p.l}</b><br>${p.n} QBs drafted<br>${p.x.toLocaleString()} net points<br>${p.y} career starts · ${p.pb} Pro Bowls<br>${(p.x/p.y).toFixed(1)} points per start`));
+    g.addEventListener("mouseleave",()=>hide(tip));
+    s.appendChild(g);});
+  box.appendChild(s);
+})();
+
+/* ---------- chart 3: buckets ---------- */
+(function(){
+  const box=document.getElementById("c3"),tip=tipFor(box);
+  const W=880,H=250,M={t:16,r:20,b:56,l:60};
+  const iw=W-M.l-M.r,ih=H-M.t-M.b,b=D.buckets;
+  const mx=16, bw=iw/b.length;
+  const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":"Points paid per career start by draft range"});
+  [0,4,8,12,16].forEach(v=>{
+    s.appendChild(el("line",{x1:M.l,x2:W-M.r,y1:M.t+ih-v/mx*ih,y2:M.t+ih-v/mx*ih,stroke:css("--rule"),"stroke-width":1}));
+    const t=el("text",{x:M.l-10,y:M.t+ih-v/mx*ih+4,"text-anchor":"end",fill:css("--ink-3"),
+      "font-family":"JetBrains Mono, monospace","font-size":11});t.textContent=v;s.appendChild(t);});
+  b.forEach((d,i)=>{
+    const h=Math.max(3,d.per_gs/mx*ih), x0=M.l+i*bw+11, w=bw-22;
+    const c=i===0?css("--crimson"):i>=3?css("--brass"):css("--steel");
+    const g=el("g",{});
+    g.appendChild(el("path",{d:`M ${x0} ${M.t+ih} L ${x0} ${M.t+ih-h+4} Q ${x0} ${M.t+ih-h} ${x0+4} ${M.t+ih-h} L ${x0+w-4} ${M.t+ih-h} Q ${x0+w} ${M.t+ih-h} ${x0+w} ${M.t+ih-h+4} L ${x0+w} ${M.t+ih} Z`,fill:c}));
+    const v=el("text",{x:x0+w/2,y:M.t+ih-h-9,"text-anchor":"middle",fill:c,
+      "font-family":"Sora, sans-serif","font-size":16,"font-weight":800});
+    v.textContent=d.per_gs.toFixed(1);g.appendChild(v);
+    const l=el("text",{x:x0+w/2,y:M.t+ih+20,"text-anchor":"middle",fill:css("--ink-2"),
+      "font-family":"Sora, sans-serif","font-size":12.5,"font-weight":600});
+    l.textContent=d.label;g.appendChild(l);
+    const n=el("text",{x:x0+w/2,y:M.t+ih+36,"text-anchor":"middle",fill:css("--ink-3"),
+      "font-family":"JetBrains Mono, monospace","font-size":11});
+    n.textContent=`${d.n} QBs · ${d.gs} starts`;g.appendChild(n);
+    g.style.cursor="crosshair";
+    g.addEventListener("mousemove",e=>show(tip,box,e,
+      `<b>${d.label}</b><br>${d.n} QBs · ${d.cap.toLocaleString()} points<br>${d.gs} career starts<br>${d.pbers} made a Pro Bowl (${d.rate}%)<br><b>${d.per_gs.toFixed(1)} points per start</b>`));
+    g.addEventListener("mouseleave",()=>hide(tip));
+    s.appendChild(g);});
+  box.appendChild(s);
+})();
+})();
+</script>
+</body>
+</html>
